@@ -1,0 +1,982 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Ryan M. Kolves | AI-Enabled Operations Transformation</title><meta name="description" content="Portfolio of Ryan M. Kolves: workflow discovery, AI-assisted systems, operational analytics, change management, coaching, and high-stakes healthcare transformation."/><meta name="keywords" content="Applied AI Architect,AI transformation,workflow discovery,operations transformation,change management,prompt engineering,AI evaluation,operational analytics,Python,SQL,APIs,coaching and enablement"/><meta name="author" content="Ryan M. Kolves"/><link rel="author" href="mailto:rkolves@gmail.com"/><meta name="creator" content="Ryan M. Kolves"/><meta property="og:title" content="Ryan M. Kolves | AI-Enabled Operations Transformation"/><meta property="og:description" content="Turning high-stakes healthcare workflows into durable systems people can trust, use, and improve."/><meta property="og:type" content="website"/><meta property="og:locale" content="en_US"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Ryan M. Kolves | AI-Enabled Operations Transformation"/><meta name="twitter:description" content="Turning high-stakes healthcare workflows into durable systems people can trust, use, and improve."/><meta name="professional-focus" content="workflow discovery, AI-assisted systems, product thinking, operational analytics, change management, coaching, enablement"/>
+
+
+
+
+
+
+
+
+
+
+
+<style data-vinext-fonts>/* cyrillic-ext */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/_vinext_fonts/geist-8ac0455e797f/geist-ff2310f5.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/_vinext_fonts/geist-8ac0455e797f/geist-875ccdd4.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/_vinext_fonts/geist-8ac0455e797f/geist-52306abf.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/_vinext_fonts/geist-8ac0455e797f/geist-001175b1.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.__font_geist_0tvmz3h { font-family: 'Geist', sans-serif; }
+
+.__variable_geist_0tvmz3h { --font-geist-sans: 'Geist', sans-serif; }
+
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/_vinext_fonts/geist-mono-00e989178794/geist-mono-f6b33328.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/_vinext_fonts/geist-mono-00e989178794/geist-mono-44e03052.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* symbols2 */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/_vinext_fonts/geist-mono-00e989178794/geist-mono-0638449e.woff2) format('woff2');
+  unicode-range: U+2000-2001, U+2004-2008, U+200A, U+23B8-23BD, U+2500-259F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/_vinext_fonts/geist-mono-00e989178794/geist-mono-971fb274.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/_vinext_fonts/geist-mono-00e989178794/geist-mono-44745446.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.__font_geist_mono_1diim1n { font-family: 'Geist Mono', sans-serif; }
+
+.__variable_geist_mono_1diim1n { --font-geist-mono: 'Geist Mono', sans-serif; }
+</style>
+<style>:root {
+  --ink: #07111f;
+  --surface: #0b1728;
+  --surface-soft: #0f1d2f;
+  --warm: #f4f0e8;
+  --warm-muted: #c6c2ba;
+  --slate: #8b9aac;
+  --cyan: #35d6e4;
+  --cyan-bright: #5ce6ef;
+  --line: #193249;
+  --line-light: rgba(139, 154, 172, 0.22);
+  --max: 1440px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--ink);
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 82% 12%, rgba(53, 214, 228, 0.055), transparent 28rem),
+    var(--ink);
+  color: var(--warm);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--cyan);
+  color: var(--ink);
+}
+
+.site-header {
+  width: min(calc(100% - 112px), var(--max));
+  height: 96px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 10;
+}
+
+.wordmark {
+  font-size: 0.84rem;
+  font-weight: 650;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: clamp(1.5rem, 4vw, 3.75rem);
+}
+
+nav a {
+  position: relative;
+  color: var(--warm-muted);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 1px;
+  left: 0;
+  bottom: -0.65rem;
+  background: var(--cyan);
+  transition: width 180ms ease;
+}
+
+nav a:hover,
+nav a:focus-visible {
+  color: var(--cyan);
+}
+
+nav a:hover::after,
+nav a:focus-visible::after {
+  width: 1.1rem;
+}
+
+.hero {
+  min-height: calc(100svh - 96px);
+  width: min(calc(100% - 112px), var(--max));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(480px, 0.96fr);
+  align-items: center;
+  position: relative;
+}
+
+.hero-copy {
+  padding: 5rem 3rem 4rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow,
+.section-kicker {
+  margin: 0;
+  color: var(--cyan);
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.hero-name {
+  margin: 1.75rem 0 0.3rem;
+  color: var(--warm);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3.5rem, 5.3vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+h1 {
+  max-width: 720px;
+  margin: 0;
+  color: var(--warm);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3.3rem, 5vw, 5.1rem);
+  font-weight: 400;
+  line-height: 1.01;
+  letter-spacing: -0.052em;
+}
+
+.hero-summary {
+  max-width: 650px;
+  margin: 1.9rem 0 0;
+  color: var(--slate);
+  font-size: clamp(1.08rem, 1.6vw, 1.35rem);
+  line-height: 1.55;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 2.45rem;
+}
+
+.button {
+  min-height: 62px;
+  padding: 0 1.8rem;
+  border: 1px solid var(--cyan);
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.98rem;
+  font-weight: 650;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.button svg,
+.contact-link svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.button-primary {
+  background: var(--cyan);
+  color: var(--ink);
+}
+
+.button-primary:hover {
+  background: var(--cyan-bright);
+  box-shadow: 0 10px 34px rgba(53, 214, 228, 0.16);
+  transform: translateY(-2px);
+}
+
+.button-secondary {
+  color: var(--cyan);
+}
+
+.button-secondary:hover {
+  background: rgba(53, 214, 228, 0.08);
+  transform: translateY(-2px);
+}
+
+.button:focus-visible,
+.contact-link:focus-visible,
+.wordmark:focus-visible {
+  outline: 2px solid var(--warm);
+  outline-offset: 4px;
+}
+
+.credibility {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.4rem;
+  margin-top: 2.8rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--line);
+  color: var(--slate);
+  font-size: 0.84rem;
+}
+
+.credibility span {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.credibility span::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  background: var(--cyan);
+}
+
+.systems-map {
+  min-height: 100%;
+  border-left: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+
+.systems-map::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, var(--ink), transparent 10%, transparent 85%, var(--ink)),
+    linear-gradient(0deg, var(--ink), transparent 13%, transparent 88%, var(--ink));
+  pointer-events: none;
+}
+
+.map-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(53, 214, 228, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(53, 214, 228, 0.06) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(90deg, transparent, black 18%, black 86%, transparent);
+}
+
+.systems-map svg {
+  width: 100%;
+  height: 100%;
+  min-height: 720px;
+  position: relative;
+  z-index: 1;
+}
+
+.path {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 1.1;
+  opacity: 0.72;
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: draw-path 1.4s 0.3s ease forwards;
+}
+
+.p2,
+.p4 {
+  opacity: 0.45;
+}
+
+.node circle:first-child {
+  fill: rgba(53, 214, 228, 0.15);
+  stroke: var(--cyan);
+  stroke-width: 1.2;
+}
+
+.node-core {
+  fill: var(--cyan);
+}
+
+.node {
+  opacity: 0;
+  animation: node-in 0.35s ease forwards;
+}
+
+.node:nth-of-type(2n) {
+  animation-delay: 0.8s;
+}
+
+.node:nth-of-type(2n + 1) {
+  animation-delay: 1s;
+}
+
+.target {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 0.8;
+  opacity: 0.48;
+}
+
+.ticks {
+  fill: none;
+  stroke: var(--slate);
+  stroke-width: 0.8;
+  opacity: 0.35;
+}
+
+.map-label {
+  position: absolute;
+  z-index: 3;
+  color: var(--cyan);
+  font-family: monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+}
+
+.map-label small {
+  color: var(--slate);
+  font-size: 0.54rem;
+}
+
+.label-one {
+  top: 10%;
+  left: 18%;
+}
+
+.label-two {
+  right: 18%;
+  bottom: 14%;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: reveal-up 0.65s ease forwards;
+}
+
+.reveal-1 { animation-delay: 0.05s; }
+.reveal-2 { animation-delay: 0.12s; }
+.reveal-3 { animation-delay: 0.19s; }
+.reveal-4 { animation-delay: 0.26s; }
+.reveal-5 { animation-delay: 0.33s; }
+.reveal-6 { animation-delay: 0.4s; }
+
+.signal-strip {
+  border-block: 1px solid var(--line);
+  background: rgba(11, 23, 40, 0.7);
+  padding: 1.2rem max(3.5rem, calc((100vw - var(--max)) / 2));
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  color: var(--slate);
+  font-family: monospace;
+  font-size: 0.69rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.signal-strip p {
+  margin: 0;
+}
+
+.signal-strip span {
+  margin: 0 0.55rem;
+  color: var(--cyan);
+}
+
+.section {
+  width: min(calc(100% - 112px), var(--max));
+  margin: 0 auto;
+  padding: clamp(6.5rem, 10vw, 10rem) 0;
+}
+
+.section-heading {
+  display: grid;
+  grid-template-columns: minmax(11rem, 0.36fr) 1fr minmax(18rem, 0.55fr);
+  align-items: end;
+  gap: 3rem;
+  margin-bottom: 4.5rem;
+}
+
+.section-heading h2,
+.approach-section h2,
+.about-section h2,
+.contact-section h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.7rem, 4.3vw, 4.7rem);
+  font-weight: 400;
+  line-height: 1.03;
+  letter-spacing: -0.045em;
+}
+
+.section-heading > p:last-child {
+  margin: 0;
+  color: var(--slate);
+  line-height: 1.7;
+}
+
+.case-list {
+  border-top: 1px solid var(--line);
+}
+
+.case-study {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 2rem;
+  padding: 3.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.case-index {
+  color: var(--cyan);
+  font-family: monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+}
+
+.case-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.case-title-row h3 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+
+.case-subtitle {
+  max-width: 760px;
+  margin: 0.8rem 0 0;
+  color: var(--slate);
+  font-size: 1rem;
+}
+
+.status {
+  flex: 0 0 auto;
+  border: 1px solid rgba(53, 214, 228, 0.45);
+  border-radius: 999px;
+  padding: 0.55rem 0.8rem;
+  color: var(--cyan);
+  font-family: monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.case-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2.4rem;
+}
+
+.case-details h4 {
+  margin: 0 0 0.65rem;
+  color: var(--warm);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.case-details p {
+  margin: 0;
+  color: var(--slate);
+  font-size: 0.93rem;
+  line-height: 1.65;
+}
+
+.capability-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.capability-tags li {
+  border-left: 2px solid var(--cyan);
+  background: var(--surface-soft);
+  padding: 0.48rem 0.7rem;
+  color: var(--warm-muted);
+  font-size: 0.73rem;
+}
+
+.approach-section {
+  border-top: 1px solid var(--line);
+}
+
+.section-heading.narrow {
+  grid-template-columns: minmax(11rem, 0.36fr) 1.55fr;
+}
+
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+}
+
+.method-grid li {
+  min-height: 285px;
+  padding: 2rem;
+  border-right: 1px solid var(--line);
+  background:
+    linear-gradient(rgba(53, 214, 228, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(53, 214, 228, 0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.method-grid li:last-child {
+  border-right: 0;
+}
+
+.method-number {
+  color: var(--cyan);
+  font-family: monospace;
+  font-size: 0.7rem;
+}
+
+.method-grid h3 {
+  margin: 4rem 0 0.8rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.method-grid p {
+  margin: 0;
+  color: var(--slate);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.alignment-section {
+  border-top: 1px solid var(--line);
+}
+
+.alignment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.alignment-grid > div {
+  min-height: 245px;
+  padding: 2rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.alignment-grid span {
+  color: var(--cyan);
+  font-family: monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.alignment-grid h3 {
+  margin: 3.2rem 0 0.75rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.65rem;
+  font-weight: 400;
+}
+
+.alignment-grid p {
+  margin: 0;
+  color: var(--slate);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.about-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8rem;
+  border-top: 1px solid var(--line);
+}
+
+.about-section h2 {
+  margin-top: 1.5rem;
+}
+
+.about-copy {
+  display: grid;
+  gap: 1.5rem;
+  color: var(--warm-muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.about-copy p {
+  margin: 0;
+}
+
+.contact-section {
+  padding: clamp(6rem, 10vw, 9rem) max(3.5rem, calc((100vw - var(--max)) / 2));
+  border-block: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 82% 50%, rgba(53, 214, 228, 0.09), transparent 24rem),
+    var(--surface);
+}
+
+.contact-section h2 {
+  max-width: 950px;
+  margin-top: 1.5rem;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 3.5rem;
+  border-bottom: 1px solid var(--cyan);
+  padding-bottom: 0.5rem;
+  color: var(--cyan);
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  text-decoration: none;
+}
+
+.contact-link svg {
+  transition: transform 180ms ease;
+}
+
+.contact-link:hover svg {
+  transform: translateX(5px);
+}
+
+footer {
+  width: min(calc(100% - 112px), var(--max));
+  min-height: 118px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  color: var(--slate);
+  font-size: 0.75rem;
+}
+
+footer p {
+  margin: 0;
+}
+
+@keyframes reveal-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes draw-path {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes node-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1080px) {
+  .site-header,
+  .hero,
+  .section,
+  footer {
+    width: min(calc(100% - 64px), var(--max));
+  }
+
+  .hero {
+    grid-template-columns: 1fr 0.72fr;
+  }
+
+  .systems-map {
+    opacity: 0.68;
+  }
+
+  .section-heading {
+    grid-template-columns: 0.35fr 1fr;
+  }
+
+  .section-heading > p:last-child {
+    grid-column: 2;
+  }
+
+  .case-details {
+    grid-template-columns: 1fr;
+    gap: 1.35rem;
+  }
+
+  .method-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .method-grid li:nth-child(2) {
+    border-right: 0;
+  }
+
+  .method-grid li:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .alignment-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .site-header,
+  .hero,
+  .section,
+  footer {
+    width: min(calc(100% - 36px), var(--max));
+  }
+
+  .site-header {
+    height: 78px;
+  }
+
+  nav {
+    gap: 1.1rem;
+  }
+
+  nav a:nth-child(2),
+  nav a:nth-child(3) {
+    display: none;
+  }
+
+  .hero {
+    min-height: auto;
+    display: block;
+  }
+
+  .hero-copy {
+    padding: 5rem 0 4rem;
+  }
+
+  .systems-map {
+    position: absolute;
+    inset: auto -18px 0 32%;
+    min-height: 46%;
+    border: 0;
+    opacity: 0.22;
+    pointer-events: none;
+  }
+
+  .systems-map svg {
+    min-height: 520px;
+  }
+
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .signal-strip {
+    padding-inline: 1.125rem;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .section-heading,
+  .section-heading.narrow {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+
+  .section-heading > p:last-child {
+    grid-column: auto;
+  }
+
+  .case-study {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .case-title-row {
+    flex-direction: column;
+  }
+
+  .method-grid,
+  .alignment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .method-grid li,
+  .method-grid li:nth-child(2) {
+    min-height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .method-grid li:last-child {
+    border-bottom: 0;
+  }
+
+  .method-grid h3 {
+    margin-top: 2rem;
+  }
+
+  .about-section {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .contact-section {
+    padding-inline: 1.125rem;
+  }
+
+  footer {
+    padding: 2.5rem 0;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style></head><body class="__variable_geist_0tvmz3h __variable_geist_mono_1diim1n antialiased"><main><script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Ryan M. Kolves","jobTitle":"EMS Supervisor and AI-Enabled Operations Transformation Leader","address":{"@type":"PostalAddress","addressLocality":"Havana","addressRegion":"Illinois","addressCountry":"US"},"email":"mailto:rkolves@gmail.com","knowsAbout":["AI-enabled workflow transformation","Workflow discovery","Operations management","Change management","AI output evaluation","Prompt engineering","Operational analytics","Python","SQL","APIs","Adult education","Cross-functional leadership"],"description":"Operations transformation leader with 18 years in high-stakes healthcare, combining workflow discovery, AI-assisted systems, analytics, product thinking, and frontline enablement.","hasOccupation":{"@type":"Occupation","name":"EMS Supervisor","skills":"Workflow discovery, cross-functional collaboration, AI-assisted workflow design, prompt engineering, process architecture, operational analytics, quality assurance, coaching, change management, Python, SQL, APIs"}}</script><header class="site-header"><a class="wordmark" href="#top" aria-label="Ryan Kolves, home">Ryan Kolves</a><nav aria-label="Primary navigation"><a href="#work">Work</a><a href="#approach">Approach</a><a href="#alignment">Alignment</a><a href="#about">About</a></nav></header><section id="top" class="hero" aria-labelledby="hero-title"><div class="hero-copy"><p class="eyebrow reveal reveal-1">Operations · AI · Adoption</p><p class="hero-name reveal reveal-2">Ryan M. Kolves</p><h1 id="hero-title" class="reveal reveal-3">AI-Enabled Operations Transformation</h1><p class="hero-summary reveal reveal-4">Turning high-stakes healthcare workflows into durable systems people can trust, use, and improve.</p><div class="hero-actions reveal reveal-5"><a class="button button-primary" href="#work">View Case Studies <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a><a class="button button-secondary" href="./Ryan_Kolves_Braze_Applied_AI_Architect_Resume.docx" download="">Download Résumé <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"></path></svg></a></div><div class="credibility reveal reveal-6" aria-label="Career highlights"><span>18 years in emergency operations</span><span>20+ person team</span><span>2,000 annual calls</span></div></div><div class="systems-map" aria-hidden="true"><div class="map-grid"></div><svg viewBox="0 0 720 720" role="presentation"><defs><filter id="glow"><feGaussianBlur stdDeviation="4" result="blur"></feGaussianBlur><feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter></defs><path class="path p1" d="M40 160H250c48 0 48 76 96 76h104c58 0 52 88 110 88h110"></path><path class="path p2" d="M92 520h120c56 0 50-126 106-126h90c62 0 42-122 104-122h118"></path><path class="path p3" d="M190 40v164c0 46 62 46 62 92v168c0 40 42 40 42 80v138"></path><path class="path p4" d="M470 58v76c0 52-78 52-78 104v214c0 48 64 48 64 96v120"></path><g class="node n1" filter="url(#glow)"><circle cx="190" cy="160" r="8"></circle><circle cx="190" cy="160" r="2.5" class="node-core"></circle></g><g class="node n2" filter="url(#glow)"><circle cx="346" cy="236" r="8"></circle><circle cx="346" cy="236" r="2.5" class="node-core"></circle></g><g class="node n3" filter="url(#glow)"><circle cx="450" cy="236" r="8"></circle><circle cx="450" cy="236" r="2.5" class="node-core"></circle></g><g class="node n4" filter="url(#glow)"><circle cx="560" cy="324" r="8"></circle><circle cx="560" cy="324" r="2.5" class="node-core"></circle></g><g class="node n5" filter="url(#glow)"><circle cx="212" cy="520" r="8"></circle><circle cx="212" cy="520" r="2.5" class="node-core"></circle></g><g class="node n6" filter="url(#glow)"><circle cx="318" cy="394" r="8"></circle><circle cx="318" cy="394" r="2.5" class="node-core"></circle></g><g class="node n7" filter="url(#glow)"><circle cx="408" cy="394" r="8"></circle><circle cx="408" cy="394" r="2.5" class="node-core"></circle></g><g class="node n8" filter="url(#glow)"><circle cx="512" cy="272" r="8"></circle><circle cx="512" cy="272" r="2.5" class="node-core"></circle></g><g class="node n9" filter="url(#glow)"><circle cx="252" cy="296" r="8"></circle><circle cx="252" cy="296" r="2.5" class="node-core"></circle></g><g class="node n10" filter="url(#glow)"><circle cx="294" cy="544" r="8"></circle><circle cx="294" cy="544" r="2.5" class="node-core"></circle></g><g class="node n11" filter="url(#glow)"><circle cx="392" cy="238" r="8"></circle><circle cx="392" cy="238" r="2.5" class="node-core"></circle></g><g class="node n12" filter="url(#glow)"><circle cx="456" cy="548" r="8"></circle><circle cx="456" cy="548" r="2.5" class="node-core"></circle></g><g class="target"><circle cx="585" cy="135" r="61"></circle><circle cx="585" cy="135" r="39"></circle><circle cx="585" cy="135" r="7"></circle><path d="M585 58v154M508 135h154"></path></g><g class="ticks"><path d="M42 86h88M42 98h50M560 595h102M560 607h58"></path><path d="M85 610v30m12-30v18m12-18v26m12-26v12M646 426v54m-12-42h24"></path></g></svg><span class="map-label label-one">SYS · 07<br/><small>NOMINAL</small></span><span class="map-label label-two">CHNL · 12<br/><small>STABLE</small></span></div></section><section class="signal-strip" aria-label="Professional positioning"><p>Researcher <span>→</span> Builder <span>→</span> Coach <span>→</span> Systems Leader</p><p>Havana, Illinois · Available for enterprise AI transformation roles</p></section><section id="work" class="section work-section" aria-labelledby="work-title"><div class="section-heading"><p class="section-kicker">Selected work</p><h2 id="work-title">Systems built around real operational pressure.</h2><p>Each case study distinguishes the problem, the system created, the available evidence, and its current implementation status.</p></div><div class="case-list"><article class="case-study"><div class="case-index">01</div><div class="case-content"><div class="case-title-row"><div><h3>Precision Transfer System</h3><p class="case-subtitle">Turning a high-risk hospital handoff into a coordinated operating model.</p></div><span class="status">System designed</span></div><div class="case-details"><div><h4>Problem</h4><p>A critical transfer exposed fragmented ownership across physician acceptance, receiving-facility communication, regulatory documentation, timestamps, and bedside handoffs.</p></div><div><h4>System</h4><p>Mapped the end-to-end workflow and designed a transfer packet, readiness checklist, role cards, timestamp summary, escalation path, rapid debrief, and 24–48 hour follow-up.</p></div><div><h4>Evidence</h4><p>Created clear Team Lead, Communications, and Documentation roles so the workflow could be executed, taught, reviewed, and reused.</p></div></div><ul class="capability-tags" aria-label="Precision Transfer System capabilities"><li>Workflow discovery</li><li>Cross-functional research</li><li>Process architecture</li><li>Regulatory risk</li><li>Playbook design</li></ul></div></article><article class="case-study"><div class="case-index">02</div><div class="case-content"><div class="case-title-row"><div><h3>Critical Staffing Operations</h3><p class="case-subtitle">Preserving advanced clinical capability under severe staffing constraints.</p></div><span class="status">Live-use procedures</span></div><div class="case-details"><div><h4>Problem</h4><p>A rural EMS system needed to maintain advanced life support coverage across three crews and two bases despite recurring paramedic shortages.</p></div><div><h4>System</h4><p>Designed a constraint-aware ALS chase model, BLS-first procedures, dispatch criteria, intercept logic, documentation standards, move-up rules, and staff-facing guidance.</p></div><div><h4>Evidence</h4><p>Procedures were developed for real staffing dates and operating conditions across a 600-square-mile service area.</p></div></div><ul class="capability-tags" aria-label="Critical Staffing Operations capabilities"><li>Constraint analysis</li><li>Decision support</li><li>Business continuity</li><li>Change communication</li><li>Operational safety</li></ul></div></article><article class="case-study"><div class="case-index">03</div><div class="case-content"><div class="case-title-row"><div><h3>Operational Intelligence</h3><p class="case-subtitle">Converting raw activity into decisions leaders can use.</p></div><span class="status">Reports produced</span></div><div class="case-details"><div><h4>Problem</h4><p>Leaders lacked a concise, repeatable view of call activity, service mix, staffing pressure, notable incidents, fleet readiness, and emerging risks.</p></div><div><h4>System</h4><p>Developed a weekly operations brief and dashboard framework covering base-level volume, ALS/BLS activity, transports, call categories, staffing, fleet status, and action items.</p></div><div><h4>Evidence</h4><p>Produced recurring summaries from live operating data, corrected source counts, and left unsupported fields blank rather than manufacturing conclusions.</p></div></div><ul class="capability-tags" aria-label="Operational Intelligence capabilities"><li>Operational analytics</li><li>Data quality</li><li>Executive reporting</li><li>Output calibration</li><li>Reusable templates</li></ul></div></article><article class="case-study"><div class="case-index">04</div><div class="case-content"><div class="case-title-row"><div><h3>AI-Assisted Quality Review</h3><p class="case-subtitle">Building a clinically grounded method for evaluating EMS documentation.</p></div><span class="status">Working prototype</span></div><div class="case-details"><div><h4>Problem</h4><p>Traditional chart review is time-intensive and can miss contradictions among the complaint, assessment, protocol, treatment, structured fields, and narrative.</p></div><div><h4>System</h4><p>Developed a structured review rubric for clinical reasoning, documentation quality, internal consistency, protocol alignment, structured accuracy, and coaching feedback.</p></div><div><h4>Evidence</h4><p>Calibrated the workflow against real report structures and corrected the AI when information documented in the narrative was initially misclassified as missing.</p></div></div><ul class="capability-tags" aria-label="AI-Assisted Quality Review capabilities"><li>AI evaluation</li><li>Prompt refinement</li><li>Human oversight</li><li>Quality assurance</li><li>Domain calibration</li></ul></div></article></div></section><section id="approach" class="section approach-section" aria-labelledby="approach-title"><div class="section-heading narrow"><p class="section-kicker">Operating model</p><h2 id="approach-title">Find the friction. Build with users. Leave capability behind.</h2></div><ol class="method-grid"><li><span class="method-number">0<!-- -->1</span><h3>Research</h3><p>Stakeholder interviews, workflow observation, friction mapping, problem framing, impact and feasibility assessment</p></li><li><span class="method-number">0<!-- -->2</span><h3>Build</h3><p>AI-assisted workflows, prompt systems, decision tools, operational analytics, playbooks, prototypes, Python, SQL, APIs</p></li><li><span class="method-number">0<!-- -->3</span><h3>Enable</h3><p>Adult education, leadership communication, frontline coaching, change management, documentation, adoption support</p></li><li><span class="method-number">0<!-- -->4</span><h3>Scale</h3><p>Reusable templates, standardized operating models, quality controls, knowledge systems, repeatable transformation patterns</p></li></ol></section><section id="alignment" class="section alignment-section" aria-labelledby="alignment-title"><div class="section-heading"><p class="section-kicker">Human + machine readable</p><h2 id="alignment-title">Role alignment, stated plainly.</h2><p>A transparent mapping of demonstrated strengths and areas still being productized. No hidden keywords and no inflated deployment claims.</p></div><div class="alignment-grid" role="list" aria-label="Applied AI role alignment"><div role="listitem"><span>Demonstrated strength</span><h3>Workflow discovery</h3><p>Stakeholder research, process mapping, friction analysis, problem framing, and prioritized operational response.</p></div><div role="listitem"><span>Demonstrated strength</span><h3>Product and systems thinking</h3><p>Role-based workflows, checklists, operating models, feedback loops, reusable templates, and adoption-focused design.</p></div><div role="listitem"><span>Demonstrated strength</span><h3>Coaching and enablement</h3><p>Adult education, frontline communication, leadership facilitation, mentoring, and change implementation.</p></div><div role="listitem"><span>Technical foundation</span><h3>AI, analytics, and integration</h3><p>Generative AI workflow design, prompt engineering, output evaluation, Python, SQL, APIs, JSON, Excel, Tableau, Cognos, and MySQL.</p></div><div role="listitem"><span>Currently productizing</span><h3>Agent and retrieval systems</h3><p>Policy retrieval, EMS quality review, staffing constraint analysis, and knowledge-backed decision-support prototypes.</p></div><div role="listitem"><span>Enterprise ramp</span><h3>SaaS data ecosystems</h3><p>Ready to deepen production experience with agent frameworks, Salesforce, Slack, Snowflake, and enterprise deployment patterns.</p></div></div></section><section id="about" class="section about-section" aria-labelledby="about-title"><div><p class="section-kicker">About Ryan</p><h2 id="about-title">A systems operator shaped by consequential work.</h2></div><div class="about-copy"><p>I lead a rural county EMS operation after 18 years as an EMT, paramedic, emergency department technician, instructor, and operational leader. My environment is resource-constrained, highly regulated, and unforgiving of vague ownership.</p><p>That experience taught me to learn workflows from the people performing them, distinguish the apparent problem from the real one, and build systems that remain useful when conditions become difficult.</p><p>I now combine that operating discipline with AI, analytics, and product thinking to transform how teams research, decide, communicate, document, and improve.</p></div></section><section class="contact-section" aria-labelledby="contact-title"><p class="section-kicker">Start a conversation</p><h2 id="contact-title">Bring me the workflow everyone has learned to tolerate.</h2><a class="contact-link" href="mailto:rkolves@gmail.com">rkolves@gmail.com <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></section><footer><p>Ryan M. Kolves · AI-Enabled Operations Transformation</p><p>Havana, Illinois · © 2026</p></footer></main></body></html>
