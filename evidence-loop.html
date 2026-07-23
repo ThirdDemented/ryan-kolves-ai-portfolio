@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Evidence Drift Lab | Ryan M. Kolves</title>
+  <meta name="description" content="An adaptive, human-supervised reasoning loop that detects when claims drift beyond their evidence and learns from corrections.">
+  <style>
+    :root {
+      --ink: #07111f;
+      --surface: #0b1728;
+      --surface-soft: #0f1d2f;
+      --warm: #f4f0e8;
+      --warm-muted: #c6c2ba;
+      --slate: #8b9aac;
+      --cyan: #35d6e4;
+      --cyan-bright: #5ce6ef;
+      --amber: #ffbd66;
+      --red: #ff7d8c;
+      --green: #73e2a7;
+      --line: #193249;
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      color-scheme: dark;
+      background: var(--ink);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 80% 8%, rgba(53, 214, 228, 0.08), transparent 30rem),
+        var(--ink);
+      color: var(--warm);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button, textarea, select { font: inherit; }
+    a { color: inherit; }
+    ::selection { background: var(--cyan); color: var(--ink); }
+
+    .shell {
+      width: min(calc(100% - 64px), var(--max));
+      margin: 0 auto;
+    }
+
+    header {
+      height: 86px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .wordmark {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      color: var(--cyan);
+      font-size: 0.88rem;
+      text-decoration: none;
+    }
+
+    .hero {
+      padding: clamp(4.5rem, 9vw, 8rem) 0 4rem;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: clamp(3rem, 8vw, 8rem);
+      align-items: end;
+    }
+
+    .eyebrow, .label {
+      margin: 0;
+      color: var(--cyan);
+      font-family: monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+    }
+
+    h1 {
+      max-width: 830px;
+      margin: 1.2rem 0 1.4rem;
+      font-size: clamp(3.4rem, 7vw, 6.6rem);
+      line-height: 0.95;
+      letter-spacing: -0.055em;
+    }
+
+    .hero-copy {
+      max-width: 760px;
+      margin: 0;
+      color: var(--slate);
+      font-size: clamp(1rem, 1.5vw, 1.25rem);
+      line-height: 1.65;
+    }
+
+    .hero-meta {
+      border-left: 1px solid var(--line);
+      padding-left: 2rem;
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .hero-meta div {
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-meta strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--warm);
+      font-size: 0.95rem;
+    }
+
+    .hero-meta span {
+      color: var(--slate);
+      font-size: 0.83rem;
+      line-height: 1.55;
+    }
+
+    .privacy-note {
+      margin: 2rem 0 0;
+      border-left: 3px solid var(--green);
+      background: rgba(115, 226, 167, 0.06);
+      padding: 1rem 1.2rem;
+      color: var(--warm-muted);
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+
+    .lab {
+      padding: 4rem 0 6rem;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: rgba(11, 23, 40, 0.8);
+    }
+
+    .panel-head {
+      min-height: 66px;
+      border-bottom: 1px solid var(--line);
+      padding: 1.1rem 1.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.45rem;
+    }
+
+    .status-pill {
+      border: 1px solid rgba(53, 214, 228, 0.45);
+      border-radius: 999px;
+      padding: 0.42rem 0.65rem;
+      color: var(--cyan);
+      font-family: monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .form-body, .result-body { padding: 1.35rem; }
+
+    .field { margin-bottom: 1.2rem; }
+
+    .field label {
+      display: block;
+      margin-bottom: 0.55rem;
+      color: var(--warm-muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--ink);
+      color: var(--warm);
+    }
+
+    textarea {
+      min-height: 146px;
+      padding: 1rem;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    select { padding: 0.75rem; }
+
+    textarea:focus, select:focus, button:focus-visible, a:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 2px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    button {
+      min-height: 48px;
+      border: 1px solid var(--cyan);
+      border-radius: 4px;
+      padding: 0 1.1rem;
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    .primary {
+      background: var(--cyan);
+      color: var(--ink);
+      font-weight: 750;
+    }
+
+    .primary:hover { background: var(--cyan-bright); transform: translateY(-1px); }
+
+    .secondary {
+      background: transparent;
+      color: var(--cyan);
+    }
+
+    .secondary:hover { background: rgba(53, 214, 228, 0.08); }
+
+    .microcopy {
+      margin: 0.85rem 0 0;
+      color: var(--slate);
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .empty {
+      min-height: 440px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--slate);
+    }
+
+    .empty strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--warm);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+    }
+
+    .hidden { display: none !important; }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .metric {
+      min-height: 102px;
+      border: 1px solid var(--line);
+      padding: 0.9rem;
+      background: var(--surface-soft);
+    }
+
+    .metric span {
+      display: block;
+      color: var(--slate);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 0.7rem;
+      color: var(--cyan);
+      font-family: monospace;
+      font-size: 1rem;
+    }
+
+    .cycle-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--line);
+    }
+
+    .cycle {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 5.5rem 1fr;
+      gap: 1rem;
+    }
+
+    .cycle-index {
+      color: var(--cyan);
+      font-family: monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cycle h3 {
+      margin: 0 0 0.35rem;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .cycle p {
+      margin: 0;
+      color: var(--slate);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+
+    .determination {
+      margin-top: 1.35rem;
+      border-left: 3px solid var(--cyan);
+      background: rgba(53, 214, 228, 0.055);
+      padding: 1.1rem;
+    }
+
+    .determination h3 {
+      margin: 0 0 0.55rem;
+      font-size: 1.3rem;
+    }
+
+    .determination p {
+      margin: 0;
+      color: var(--warm-muted);
+      line-height: 1.6;
+    }
+
+    .feedback {
+      margin-top: 1.25rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1.25rem;
+    }
+
+    .feedback h3 {
+      margin: 0 0 0.85rem;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.86rem;
+    }
+
+    .correction-box {
+      margin-top: 0.85rem;
+      border: 1px solid var(--line);
+      padding: 1rem;
+      background: var(--surface-soft);
+    }
+
+    .memory-section {
+      padding: 0 0 7rem;
+    }
+
+    .memory-head {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .memory-head h2 {
+      margin: 0.7rem 0 0;
+      font-size: clamp(2rem, 4vw, 3.7rem);
+    }
+
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    .memory-card {
+      min-height: 180px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 1.3rem;
+    }
+
+    .memory-card span {
+      color: var(--cyan);
+      font-family: monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .memory-card strong {
+      display: block;
+      margin: 2.2rem 0 0.5rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2rem;
+      font-weight: 400;
+    }
+
+    .memory-card p {
+      margin: 0;
+      color: var(--slate);
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+
+    .architecture {
+      padding: 6rem 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .architecture h2 {
+      max-width: 850px;
+      margin: 0.8rem 0 2rem;
+      font-size: clamp(2.4rem, 5vw, 4.6rem);
+      line-height: 1.02;
+    }
+
+    .architecture-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border: 1px solid var(--line);
+    }
+
+    .architecture-grid div {
+      min-height: 210px;
+      border-right: 1px solid var(--line);
+      padding: 1.25rem;
+    }
+
+    .architecture-grid div:last-child { border-right: 0; }
+
+    .architecture-grid b {
+      display: block;
+      margin: 2.8rem 0 0.6rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+      font-weight: 400;
+    }
+
+    .architecture-grid p {
+      margin: 0;
+      color: var(--slate);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    footer {
+      min-height: 110px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      color: var(--slate);
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 960px) {
+      .hero, .lab { grid-template-columns: 1fr; }
+      .hero-meta { border-left: 0; padding-left: 0; }
+      .memory-grid { grid-template-columns: repeat(2, 1fr); }
+      .architecture-grid { grid-template-columns: 1fr; }
+      .architecture-grid div { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+      .architecture-grid div:last-child { border-bottom: 0; }
+      .architecture-grid b { margin-top: 1.6rem; }
+    }
+
+    @media (max-width: 640px) {
+      .shell { width: min(calc(100% - 32px), var(--max)); }
+      header { height: 72px; }
+      h1 { font-size: clamp(3rem, 16vw, 4.4rem); }
+      .lab { grid-template-columns: minmax(0, 1fr); }
+      .score-grid, .memory-grid { grid-template-columns: 1fr; }
+      .cycle { grid-template-columns: 1fr; gap: 0.45rem; }
+      .memory-head, footer { align-items: flex-start; flex-direction: column; }
+      footer { padding: 2rem 0; justify-content: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <a class="wordmark" href="./index.html">Ryan Kolves</a>
+      <a class="back-link" href="./index.html#work">← Back to portfolio</a>
+    </header>
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Working prototype · Adaptive evaluation</p>
+        <h1>Evidence Drift Lab</h1>
+        <p class="hero-copy">
+          A transparent reasoning loop that separates sourced facts from inference,
+          challenges unsupported certainty, rewrites overreaching claims, and learns
+          from human correction.
+        </p>
+        <p class="privacy-note">
+          <strong>Privacy boundary:</strong> This browser-only demonstration is for public,
+          fictional, or non-sensitive text. Do not enter patient, employee, confidential,
+          proprietary, or personally identifying information. Inputs and learning memory
+          remain on this device.
+        </p>
+      </div>
+      <div class="hero-meta" aria-label="Prototype characteristics">
+        <div><strong>Visible state</strong><span>Every classification, critique, revision, and stopping reason is shown.</span></div>
+        <div><strong>Human supervised</strong><span>The loop proposes. A person confirms or corrects the conclusion.</span></div>
+        <div><strong>Adaptive memory</strong><span>Feedback updates local scoring weights and influences later classifications.</span></div>
+        <div><strong>Truthful scope</strong><span>A client-side adaptive prototype, not a claim of autonomous model retraining.</span></div>
+      </div>
+    </section>
+
+    <section class="lab" aria-label="Evidence drift demonstration">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Test a claim</h2>
+          <span class="status-pill">Local only</span>
+        </div>
+        <div class="form-body">
+          <div class="field">
+            <label for="example">Demonstration case</label>
+            <select id="example">
+              <option value="braze">Attribution drift</option>
+              <option value="experience">Strong supported inference</option>
+              <option value="policy">Direct source support</option>
+              <option value="custom">Custom non-sensitive text</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="source">Source material</label>
+            <textarea id="source" spellcheck="true"></textarea>
+          </div>
+          <div class="field">
+            <label for="claim">Claim to evaluate</label>
+            <textarea id="claim" spellcheck="true"></textarea>
+          </div>
+          <div class="button-row">
+            <button class="primary" id="analyze" type="button">Run adaptive loop</button>
+            <button class="secondary" id="reset-example" type="button">Reset example</button>
+          </div>
+          <p class="microcopy">
+            The prototype uses explainable linguistic features and an online learning
+            update. It does not send text to an external model or server.
+          </p>
+        </div>
+      </div>
+
+      <div class="panel" aria-live="polite">
+        <div class="panel-head">
+          <h2>Loop trace</h2>
+          <span class="status-pill" id="run-status">Ready</span>
+        </div>
+        <div class="result-body">
+          <div class="empty" id="empty">
+            <div>
+              <strong>No analysis yet</strong>
+              Run the loop to inspect its reasoning, critique, revision, and stop condition.
+            </div>
+          </div>
+
+          <div id="results" class="hidden">
+            <div class="score-grid">
+              <div class="metric"><span>Classification</span><strong id="classification">—</strong></div>
+              <div class="metric"><span>Confidence</span><strong id="confidence">—</strong></div>
+              <div class="metric"><span>Drift risk</span><strong id="risk">—</strong></div>
+            </div>
+
+            <ol class="cycle-list" id="cycles"></ol>
+
+            <div class="determination">
+              <p class="label">Final determination</p>
+              <h3 id="final-label">—</h3>
+              <p id="final-copy">—</p>
+            </div>
+
+            <div class="feedback">
+              <h3>Human checkpoint: Was the classification correct?</h3>
+              <div class="button-row">
+                <button class="primary" id="approve" type="button">Yes, reinforce it</button>
+                <button class="secondary" id="correct" type="button">No, correct it</button>
+              </div>
+              <div class="correction-box hidden" id="correction-box">
+                <div class="field">
+                  <label for="correct-label">Correct classification</label>
+                  <select id="correct-label">
+                    <option value="sourced fact">Sourced fact</option>
+                    <option value="inference">Inference</option>
+                    <option value="hypothesis">Hypothesis</option>
+                    <option value="unknown">Unknown</option>
+                  </select>
+                </div>
+                <button class="primary" id="teach" type="button">Teach the loop</button>
+              </div>
+              <p class="microcopy" id="feedback-note">Feedback changes later scoring and is retained in this browser.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="memory-section">
+      <div class="memory-head">
+        <div>
+          <p class="eyebrow">Persistent local state</p>
+          <h2>What the loop has learned</h2>
+        </div>
+        <button class="secondary" id="clear-memory" type="button">Clear learning memory</button>
+      </div>
+      <div class="memory-grid">
+        <div class="memory-card"><span>Completed analyses</span><strong id="memory-runs">0</strong><p>Every finished evaluator–critic–optimizer cycle.</p></div>
+        <div class="memory-card"><span>Human confirmations</span><strong id="memory-approvals">0</strong><p>Predictions explicitly reinforced by a person.</p></div>
+        <div class="memory-card"><span>Human corrections</span><strong id="memory-corrections">0</strong><p>Classification errors converted into weight updates.</p></div>
+        <div class="memory-card"><span>Latest lesson</span><strong id="memory-lesson">None</strong><p id="memory-lesson-copy">The loop has not received feedback yet.</p></div>
+      </div>
+    </section>
+
+    <section class="architecture">
+      <p class="eyebrow">System architecture</p>
+      <h2>Improvement is controlled, observable, and bounded.</h2>
+      <div class="architecture-grid">
+        <div><span class="label">01</span><b>Extract</b><p>Measures source–claim overlap, unsupported additions, certainty language, and attribution.</p></div>
+        <div><span class="label">02</span><b>Evaluate</b><p>Classifies the epistemic status and calculates confidence from visible features.</p></div>
+        <div><span class="label">03</span><b>Critique</b><p>Looks for promoted inference, overconfidence, weak provenance, and missing qualification.</p></div>
+        <div><span class="label">04</span><b>Optimize</b><p>Produces a bounded revision when the wording outruns the available evidence.</p></div>
+        <div><span class="label">05</span><b>Learn</b><p>Human feedback updates local class weights; iteration stops after improvement or three cycles.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Ryan M. Kolves · Evidence Drift Lab</span>
+      <span>Adaptive prototype · No external data transmission</span>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const STORAGE_KEY = "ryan-evidence-drift-lab-v1";
+      const labels = ["sourced fact", "inference", "hypothesis", "unknown"];
+      const featureNames = ["overlap", "unsupported", "certainty", "hedging", "attribution", "question"];
+
+      const defaultWeights = {
+        "sourced fact": { overlap: 2.6, unsupported: -2.2, certainty: 0.25, hedging: -0.55, attribution: 0.55, question: -0.4, bias: 0.15 },
+        "inference": { overlap: 1.15, unsupported: 0.8, certainty: -0.25, hedging: 0.9, attribution: 0.15, question: -0.15, bias: 0.5 },
+        "hypothesis": { overlap: 0.25, unsupported: 1.15, certainty: -0.85, hedging: 1.15, attribution: -0.15, question: 0.35, bias: -0.05 },
+        "unknown": { overlap: -1.2, unsupported: 1.65, certainty: 0.25, hedging: 0.1, attribution: -0.45, question: 0.45, bias: 0.05 }
+      };
+
+      const examples = {
+        braze: {
+          source: "Ryan described one of his strengths as teaching robust prompt loops and scouting behavior. The Braze role description discusses building agents, evaluating outputs, discovering workflow friction, and coaching teams toward self-sufficiency.",
+          claim: "Braze specifically wants robust prompt loops and scouting behavior."
+        },
+        experience: {
+          source: "Braze requires at least five years of professional experience involving analytical thinking, problem-solving, and cross-functional collaboration. Ryan has approximately eighteen years of EMS experience and currently leads operational work across clinical, administrative, and external stakeholders.",
+          claim: "Ryan appears to satisfy Braze's five-year professional-experience requirement, subject to Braze's assessment of relevance."
+        },
+        policy: {
+          source: "The published procedure states that the supervisor must review the form before final approval.",
+          claim: "The procedure requires supervisor review before final approval."
+        },
+        custom: {
+          source: "",
+          claim: ""
+        }
+      };
+
+      const stopWords = new Set([
+        "a","an","and","are","as","at","be","been","before","but","by","for","from",
+        "has","have","he","her","his","in","is","it","its","of","on","or","our","she",
+        "that","the","their","them","they","this","to","was","were","will","with","you"
+      ]);
+
+      const $ = (id) => document.getElementById(id);
+      const source = $("source");
+      const claim = $("claim");
+      let lastRun = null;
+
+      function cloneDefaults() {
+        return JSON.parse(JSON.stringify(defaultWeights));
+      }
+
+      function loadMemory() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+          if (saved && saved.weights && saved.stats) return saved;
+        } catch (_) {}
+        return {
+          weights: cloneDefaults(),
+          stats: { runs: 0, approvals: 0, corrections: 0, lastLesson: "", lastDetail: "The loop has not received feedback yet." }
+        };
+      }
+
+      let memory = loadMemory();
+
+      function saveMemory() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(memory));
+        renderMemory();
+      }
+
+      function tokenize(text) {
+        return [...new Set(
+          text.toLowerCase()
+            .replace(/[^a-z0-9'\s-]/g, " ")
+            .split(/\s+/)
+            .filter((word) => word.length > 2 && !stopWords.has(word))
+        )];
+      }
+
+      function countMarkers(text, markers) {
+        const lower = text.toLowerCase();
+        return markers.reduce((count, marker) => count + (lower.includes(marker) ? 1 : 0), 0);
+      }
+
+      function extractFeatures(sourceText, claimText) {
+        const sourceTokens = tokenize(sourceText);
+        const claimTokens = tokenize(claimText);
+        const sourceSet = new Set(sourceTokens);
+        const shared = claimTokens.filter((token) => sourceSet.has(token));
+        const unsupportedTokens = claimTokens.filter((token) => !sourceSet.has(token));
+        const overlap = claimTokens.length ? shared.length / claimTokens.length : 0;
+        const unsupported = claimTokens.length ? unsupportedTokens.length / claimTokens.length : 1;
+        const certainty = Math.min(1, countMarkers(claimText, [
+          "specifically", "proves", "definitely", "clearly", "always", "must", "is qualified", "wants"
+        ]) / 2);
+        const hedging = Math.min(1, countMarkers(claimText, [
+          "appears", "suggests", "may", "might", "likely", "could", "subject to", "based on"
+        ]) / 2);
+        const attribution = Math.min(1, countMarkers(claimText, [
+          "according to", "the source", "the procedure", "the posting", "published", "states", "requires"
+        ]) / 2);
+        const question = claimText.includes("?") ? 1 : 0;
+
+        return {
+          values: { overlap, unsupported, certainty, hedging, attribution, question },
+          shared,
+          unsupportedTokens
+        };
+      }
+
+      function scoreLabels(values) {
+        const scores = {};
+        labels.forEach((label) => {
+          const weights = memory.weights[label];
+          scores[label] = weights.bias;
+          featureNames.forEach((feature) => {
+            scores[label] += weights[feature] * values[feature];
+          });
+        });
+        return scores;
+      }
+
+      function softmax(scores) {
+        const max = Math.max(...Object.values(scores));
+        const exps = Object.fromEntries(Object.entries(scores).map(([key, value]) => [key, Math.exp(value - max)]));
+        const total = Object.values(exps).reduce((sum, value) => sum + value, 0);
+        return Object.fromEntries(Object.entries(exps).map(([key, value]) => [key, value / total]));
+      }
+
+      function classify(values) {
+        const scores = scoreLabels(values);
+        const probabilities = softmax(scores);
+        const sorted = Object.entries(probabilities).sort((a, b) => b[1] - a[1]);
+        return {
+          label: sorted[0][0],
+          confidence: sorted[0][1],
+          runnerUp: sorted[1][0],
+          margin: sorted[0][1] - sorted[1][1],
+          probabilities
+        };
+      }
+
+      function driftRisk(features, classification) {
+        const { unsupported, certainty, hedging, overlap } = features.values;
+        let risk = unsupported * 0.45 + certainty * 0.35 + (1 - overlap) * 0.2 - hedging * 0.18;
+        if (classification.label === "sourced fact" && unsupported > 0.28) risk += 0.22;
+        if (classification.label === "inference" && certainty > hedging) risk += 0.12;
+        return Math.max(0, Math.min(1, risk));
+      }
+
+      function qualifyClaim(claimText, label, risk) {
+        const trimmed = claimText.trim().replace(/[.]+$/, "");
+        if (risk < 0.32 && label === "sourced fact") return `${trimmed}.`;
+        if (label === "inference") {
+          if (/appears|suggests|may|likely|based on/i.test(trimmed)) return `${trimmed}.`;
+          return `The available source suggests that ${trimmed.charAt(0).toLowerCase()}${trimmed.slice(1)}, but this remains an inference rather than a sourced fact.`;
+        }
+        if (label === "hypothesis") {
+          return `One possible interpretation is that ${trimmed.charAt(0).toLowerCase()}${trimmed.slice(1)}; additional evidence is needed to test it.`;
+        }
+        return `The available source does not establish that ${trimmed.charAt(0).toLowerCase()}${trimmed.slice(1)}.`;
+      }
+
+      function buildCritique(features, classification, risk) {
+        const notes = [];
+        if (features.values.unsupported > 0.34) {
+          notes.push(`The claim introduces ${features.unsupportedTokens.slice(0, 5).join(", ") || "terms"} that are not directly carried by the source.`);
+        }
+        if (features.values.certainty > features.values.hedging && classification.label !== "sourced fact") {
+          notes.push("The claim uses stronger certainty than its evidence classification supports.");
+        }
+        if (features.values.overlap > 0.66 && features.values.unsupported < 0.25) {
+          notes.push("Most material language is traceable to the supplied source.");
+        }
+        if (classification.margin < 0.16) {
+          notes.push(`The classification is close to ${classification.runnerUp}; human review is especially important.`);
+        }
+        if (!notes.length) notes.push("No major evidence-boundary defect was detected by the current feature set.");
+        return { notes, risk };
+      }
+
+      function runLoop() {
+        const sourceText = source.value.trim();
+        const claimText = claim.value.trim();
+        if (!sourceText || !claimText) {
+          $("run-status").textContent = "Input needed";
+          return;
+        }
+
+        $("run-status").textContent = "Running";
+        const features = extractFeatures(sourceText, claimText);
+        const initialClassification = classify(features.values);
+        const critique = buildCritique(features, initialClassification, driftRisk(features, initialClassification));
+        let finalLabel = initialClassification.label;
+
+        if (initialClassification.label === "sourced fact" && critique.risk >= 0.34) {
+          finalLabel = "inference";
+          critique.notes.push("The critic demoted the initial sourced-fact classification because the claim outran the source boundary.");
+        }
+
+        const classification = {
+          ...initialClassification,
+          label: finalLabel,
+          confidence: initialClassification.probabilities[finalLabel]
+        };
+        const revision = qualifyClaim(claimText, classification.label, critique.risk);
+
+        const cycles = [
+          {
+            title: "Evidence extraction",
+            copy: `${features.shared.length} material terms overlap with the source; ${features.unsupportedTokens.length} require interpretation or additional support.`
+          },
+          {
+            title: "Evaluator classification",
+            copy: `The adaptive scorer initially selected ${initialClassification.label} at ${Math.round(initialClassification.confidence * 100)}% confidence; the next closest class was ${initialClassification.runnerUp}.`
+          },
+          {
+            title: "Adversarial critique",
+            copy: critique.notes.join(" ")
+          }
+        ];
+
+        if (revision.toLowerCase() !== `${claimText.replace(/[.]+$/, "")}.`.toLowerCase()) {
+          cycles.push({
+            title: "Bounded optimization",
+            copy: "The wording was revised to keep the conclusion inside the available evidence boundary."
+          });
+        } else {
+          cycles.push({
+            title: "Stop condition",
+            copy: "No material wording change was justified. The loop stopped rather than revising for activity's sake."
+          });
+        }
+
+        lastRun = {
+          sourceText,
+          claimText,
+          features,
+          classification,
+          initialLabel: initialClassification.label,
+          critique,
+          revision
+        };
+        memory.stats.runs += 1;
+        saveMemory();
+        renderRun(cycles);
+      }
+
+      function renderRun(cycles) {
+        $("empty").classList.add("hidden");
+        $("results").classList.remove("hidden");
+        $("classification").textContent = titleCase(lastRun.classification.label);
+        $("confidence").textContent = `${Math.round(lastRun.classification.confidence * 100)}%`;
+        $("risk").textContent = riskLabel(lastRun.critique.risk);
+        $("final-label").textContent = titleCase(lastRun.classification.label);
+        $("final-copy").textContent = lastRun.revision;
+        $("cycles").innerHTML = cycles.map((cycle, index) => `
+          <li class="cycle">
+            <span class="cycle-index">Cycle ${String(index + 1).padStart(2, "0")}</span>
+            <div><h3>${escapeHtml(cycle.title)}</h3><p>${escapeHtml(cycle.copy)}</p></div>
+          </li>
+        `).join("");
+        $("correction-box").classList.add("hidden");
+        $("feedback-note").textContent = "Feedback changes later scoring and is retained in this browser.";
+        $("run-status").textContent = "Awaiting human";
+      }
+
+      function reinforce(targetLabel, isCorrection) {
+        if (!lastRun) return;
+        const predicted = lastRun.initialLabel || lastRun.classification.label;
+        const values = lastRun.features.values;
+        const rate = isCorrection ? 0.42 : 0.08;
+
+        featureNames.forEach((feature) => {
+          const value = values[feature];
+          memory.weights[targetLabel][feature] += rate * value;
+          if (predicted !== targetLabel) {
+            memory.weights[predicted][feature] -= rate * value;
+          }
+        });
+        memory.weights[targetLabel].bias += rate * 0.25;
+        if (predicted !== targetLabel) memory.weights[predicted].bias -= rate * 0.25;
+
+        if (isCorrection) {
+          memory.stats.corrections += 1;
+          memory.stats.lastLesson = `${titleCase(predicted)} → ${titleCase(targetLabel)}`;
+          memory.stats.lastDetail = `Human correction updated ${featureNames.filter((feature) => values[feature] > 0.05).join(", ") || "class-bias"} weights.`;
+          $("feedback-note").textContent = `Correction learned: future cases with similar features will move toward ${targetLabel}.`;
+        } else {
+          memory.stats.approvals += 1;
+          memory.stats.lastLesson = `${titleCase(targetLabel)} reinforced`;
+          memory.stats.lastDetail = "Human confirmation applied a small positive update without overpowering the base model.";
+          $("feedback-note").textContent = "Classification reinforced with a small bounded update.";
+        }
+
+        saveMemory();
+        $("run-status").textContent = "Lesson stored";
+        $("correction-box").classList.add("hidden");
+      }
+
+      function renderMemory() {
+        $("memory-runs").textContent = memory.stats.runs;
+        $("memory-approvals").textContent = memory.stats.approvals;
+        $("memory-corrections").textContent = memory.stats.corrections;
+        $("memory-lesson").textContent = memory.stats.lastLesson || "None";
+        $("memory-lesson-copy").textContent = memory.stats.lastDetail;
+      }
+
+      function loadExample(key) {
+        source.value = examples[key].source;
+        claim.value = examples[key].claim;
+        source.readOnly = key !== "custom";
+        claim.readOnly = key !== "custom";
+        $("empty").classList.remove("hidden");
+        $("results").classList.add("hidden");
+        $("run-status").textContent = "Ready";
+        lastRun = null;
+      }
+
+      function titleCase(value) {
+        return value.replace(/\b\w/g, (letter) => letter.toUpperCase());
+      }
+
+      function riskLabel(value) {
+        if (value >= 0.66) return "High";
+        if (value >= 0.34) return "Moderate";
+        return "Low";
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      $("example").addEventListener("change", (event) => loadExample(event.target.value));
+      $("reset-example").addEventListener("click", () => loadExample($("example").value));
+      $("analyze").addEventListener("click", runLoop);
+      $("approve").addEventListener("click", () => reinforce(lastRun.classification.label, false));
+      $("correct").addEventListener("click", () => $("correction-box").classList.remove("hidden"));
+      $("teach").addEventListener("click", () => reinforce($("correct-label").value, true));
+      $("clear-memory").addEventListener("click", () => {
+        memory = {
+          weights: cloneDefaults(),
+          stats: { runs: 0, approvals: 0, corrections: 0, lastLesson: "", lastDetail: "The loop has not received feedback yet." }
+        };
+        localStorage.removeItem(STORAGE_KEY);
+        renderMemory();
+        $("run-status").textContent = "Memory cleared";
+      });
+
+      loadExample("braze");
+      renderMemory();
+    })();
+  </script>
+</body>
+</html>
