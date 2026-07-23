@@ -855,8 +855,20 @@
 
         $("run-status").textContent = "Running";
         const features = extractFeatures(sourceText, claimText);
-        const classification = classify(features.values);
-        const critique = buildCritique(features, classification, driftRisk(features, classification));
+        const initialClassification = classify(features.values);
+        const critique = buildCritique(features, initialClassification, driftRisk(features, initialClassification));
+        let finalLabel = initialClassification.label;
+
+        if (initialClassification.label === "sourced fact" && critique.risk >= 0.34) {
+          finalLabel = "inference";
+          critique.notes.push("The critic demoted the initial sourced-fact classification because the claim outran the source boundary.");
+        }
+
+        const classification = {
+          ...initialClassification,
+          label: finalLabel,
+          confidence: initialClassification.probabilities[finalLabel]
+        };
         const revision = qualifyClaim(claimText, classification.label, critique.risk);
 
         const cycles = [
@@ -866,7 +878,7 @@
           },
           {
             title: "Evaluator classification",
-            copy: `The adaptive scorer selected ${classification.label} at ${Math.round(classification.confidence * 100)}% confidence; the next closest class was ${classification.runnerUp}.`
+            copy: `The adaptive scorer initially selected ${initialClassification.label} at ${Math.round(initialClassification.confidence * 100)}% confidence; the next closest class was ${initialClassification.runnerUp}.`
           },
           {
             title: "Adversarial critique",
@@ -886,7 +898,15 @@
           });
         }
 
-        lastRun = { sourceText, claimText, features, classification, critique, revision };
+        lastRun = {
+          sourceText,
+          claimText,
+          features,
+          classification,
+          initialLabel: initialClassification.label,
+          critique,
+          revision
+        };
         memory.stats.runs += 1;
         saveMemory();
         renderRun(cycles);
@@ -913,19 +933,19 @@
 
       function reinforce(targetLabel, isCorrection) {
         if (!lastRun) return;
-        const predicted = lastRun.classification.label;
+        const predicted = lastRun.initialLabel || lastRun.classification.label;
         const values = lastRun.features.values;
         const rate = isCorrection ? 0.42 : 0.08;
 
         featureNames.forEach((feature) => {
           const value = values[feature];
           memory.weights[targetLabel][feature] += rate * value;
-          if (isCorrection && predicted !== targetLabel) {
+          if (predicted !== targetLabel) {
             memory.weights[predicted][feature] -= rate * value;
           }
         });
         memory.weights[targetLabel].bias += rate * 0.25;
-        if (isCorrection && predicted !== targetLabel) memory.weights[predicted].bias -= rate * 0.25;
+        if (predicted !== targetLabel) memory.weights[predicted].bias -= rate * 0.25;
 
         if (isCorrection) {
           memory.stats.corrections += 1;
